@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -57,8 +58,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Disabled
 public class TeleOp extends OpMode
 {
-    DcMotor leftMotor;
-    DcMotor rightMotor;
+    DcMotor frontLeftMotor;
+    DcMotor backLeftMotor;
+    DcMotor frontRightMotor;
+    DcMotor backRightMotor;
+    ColorSensor color;
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -72,10 +76,14 @@ public class TeleOp extends OpMode
     @Override
     public void init() {
 
-        leftMotor = hardwareMap.dcMotor.get("leftMotor");
-        rightMotor = hardwareMap.dcMotor.get("rightMotor");
+        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
+        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
+        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
+        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        color = hardwareMap.colorSensor.get("Color");
+        color.enableLed(true);
 
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
 
@@ -91,6 +99,7 @@ public class TeleOp extends OpMode
         // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         //  rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         // telemetry.addData("Status", "Initialized");
+
     }
 
     /*
@@ -105,7 +114,9 @@ public class TeleOp extends OpMode
      */
     @Override
     public void start() {
+
         runtime.reset();
+        telemetry.addLine("TeleOp Started");
     }
 
     /*
@@ -115,8 +126,18 @@ public class TeleOp extends OpMode
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
 
-        leftMotor.setPower(-gamepad1.left_stick_y);
-        rightMotor.setPower(-gamepad1.right_stick_y);
+        frontLeftMotor.setPower(-gamepad1.left_stick_y);
+        backLeftMotor.setPower(-gamepad1.left_stick_y);
+        frontRightMotor.setPower(-gamepad1.right_stick_y);
+        backRightMotor.setPower(-gamepad1.right_stick_y);
+
+        telemetry.addData("Clear", color.alpha());
+        telemetry.addData("Red  ", color.red());
+        telemetry.addData("Green", color.green());
+        telemetry.addData("Blue ", color.blue());
+
+        telemetry.addData("Right Position", frontRightMotor.getCurrentPosition());
+        telemetry.addData("Left Position", frontLeftMotor.getCurrentPosition());
 
         // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
         // leftMotor.setPower(-gamepad1.left_stick_y);
