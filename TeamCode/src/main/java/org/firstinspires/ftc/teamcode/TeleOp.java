@@ -82,7 +82,8 @@ public class TeleOp extends OpMode
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         color = hardwareMap.colorSensor.get("Color");
         color.enableLed(true);
-
+        
+        //Delete This Line
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
