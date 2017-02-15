@@ -62,7 +62,11 @@ public class TeleOp extends OpMode
     DcMotor backLeftMotor;
     DcMotor frontRightMotor;
     DcMotor backRightMotor;
-    ColorSensor color;
+    DcMotor catapult1;
+    DcMotor catapult2;
+    DcMotor scoopie;
+    DcMotor tail;
+//    ColorSensor color;
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -80,26 +84,14 @@ public class TeleOp extends OpMode
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
-        color = hardwareMap.colorSensor.get("Color");
-        color.enableLed(true);
-        
-        //Delete This Line
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        catapult1 = hardwareMap.dcMotor.get("catapult1");
+        catapult2 = hardwareMap.dcMotor.get("catapult2");
+        scoopie = hardwareMap.dcMotor.get("scoopie");
+        tail = hardwareMap.dcMotor.get("tail");
+//        color = hardwareMap.colorSensor.get("Color");
+//        color.enableLed(true);
 
         telemetry.addData("Status", "Initialized");
-
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
-        // leftMotor  = hardwareMap.dcMotor.get("left motor");
-        // rightMotor = hardwareMap.dcMotor.get("right motor");
-
-        // eg: Set the drive motor directions:
-        // Reverse the motor that runs backwards when connected directly to the battery
-        // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        //  rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        // telemetry.addData("Status", "Initialized");
 
     }
 
@@ -132,17 +124,35 @@ public class TeleOp extends OpMode
         frontRightMotor.setPower(-gamepad1.right_stick_y);
         backRightMotor.setPower(-gamepad1.right_stick_y);
 
-        telemetry.addData("Clear", color.alpha());
-        telemetry.addData("Red  ", color.red());
-        telemetry.addData("Green", color.green());
-        telemetry.addData("Blue ", color.blue());
+        if(gamepad2.right_bumper){
+            catapult1.setPower(1);
+            catapult2.setPower(1);
+        } else {
+            catapult1.setPower(0);
+            catapult2.setPower(0);
+        }
+
+        if(gamepad2.left_bumper){
+            scoopie.setPower(1);
+        } else {
+            scoopie.setPower(0);
+        }
+
+        if(gamepad2.start){
+            tail.setPower(1);
+        } else if(gamepad2.back){
+            tail.setPower(-1);
+        } else {
+            tail.setPower(0);
+        }
+
+//        telemetry.addData("Clear", color.alpha());
+//        telemetry.addData("Red  ", color.red());
+//        telemetry.addData("Green", color.green());
+//        telemetry.addData("Blue ", color.blue());
 
         telemetry.addData("Right Position", frontRightMotor.getCurrentPosition());
         telemetry.addData("Left Position", frontLeftMotor.getCurrentPosition());
-
-        // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-        // leftMotor.setPower(-gamepad1.left_stick_y);
-        // rightMotor.setPower(-gamepad1.right_stick_y);
     }
 
     /*
