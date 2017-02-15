@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -64,8 +65,10 @@ public class TeleOp extends OpMode
     DcMotor backRightMotor;
     DcMotor catapult1;
     DcMotor catapult2;
-    DcMotor scoopie;
-    DcMotor tail;
+    DcMotor collector;
+    Servo elevator;
+    Servo scoopie;
+    Servo tail;
 //    ColorSensor color;
 
     /* Declare OpMode members. */
@@ -86,8 +89,10 @@ public class TeleOp extends OpMode
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         catapult1 = hardwareMap.dcMotor.get("catapult1");
         catapult2 = hardwareMap.dcMotor.get("catapult2");
-        scoopie = hardwareMap.dcMotor.get("scoopie");
-        tail = hardwareMap.dcMotor.get("tail");
+        collector = hardwareMap.dcMotor.get("collector");
+        elevator = hardwareMap.servo.get("elevator");
+        scoopie = hardwareMap.servo.get("scoopie");
+        tail = hardwareMap.servo.get("tail");
 //        color = hardwareMap.colorSensor.get("Color");
 //        color.enableLed(true);
 
@@ -132,18 +137,26 @@ public class TeleOp extends OpMode
             catapult2.setPower(0);
         }
 
-        if(gamepad2.left_bumper){
-            scoopie.setPower(1);
+        if(gamepad2.a){
+            collector.setPower(1);
+            elevator.setPosition(.5);
         } else {
-            scoopie.setPower(0);
+            collector.setPower(0);
+            elevator.setPosition(0);
+        }
+
+        if(gamepad2.left_bumper){
+            scoopie.setPosition(90);
+        } else {
+            scoopie.setPosition(0);
         }
 
         if(gamepad2.start){
-            tail.setPower(1);
+            tail.setPosition(.5);
         } else if(gamepad2.back){
-            tail.setPower(-1);
+            tail.setPosition(1);
         } else {
-            tail.setPower(0);
+            tail.setPosition(0);
         }
 
 //        telemetry.addData("Clear", color.alpha());
