@@ -87,12 +87,12 @@ public class TeleOp extends OpMode
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
-        catapult1 = hardwareMap.dcMotor.get("catapult1");
-        catapult2 = hardwareMap.dcMotor.get("catapult2");
-        collector = hardwareMap.dcMotor.get("collector");
-        elevator = hardwareMap.servo.get("elevator");
-        scoopie = hardwareMap.servo.get("scoopie");
-        tail = hardwareMap.servo.get("tail");
+        catapult1 = hardwareMap.dcMotor.get("shooter1");
+        catapult2 = hardwareMap.dcMotor.get("shooter2");
+        collector = hardwareMap.dcMotor.get("staging");
+        elevator = hardwareMap.servo.get("collector");
+        scoopie = hardwareMap.servo.get("scoopee");
+        tail = hardwareMap.servo.get("tailMotor");
 //        color = hardwareMap.colorSensor.get("Color");
 //        color.enableLed(true);
 
@@ -124,10 +124,24 @@ public class TeleOp extends OpMode
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
 
+        // Driver Controls
+        /*
+            Literally just driving
+         */
         frontLeftMotor.setPower(-gamepad1.left_stick_y);
         backLeftMotor.setPower(-gamepad1.left_stick_y);
         frontRightMotor.setPower(-gamepad1.right_stick_y);
         backRightMotor.setPower(-gamepad1.right_stick_y);
+
+        // Aux Controls
+        /*
+            Right Bumper = Catapult
+            Left Bumper = Scoopie
+            A = Collect
+            B = Eject
+            Start = Tail Down
+            Back = Tail Up
+           */
 
         if(gamepad2.right_bumper){
             catapult1.setPower(1);
@@ -139,10 +153,15 @@ public class TeleOp extends OpMode
 
         if(gamepad2.a){
             collector.setPower(1);
-            elevator.setPosition(.5);
+            elevator.setDirection(Servo.Direction.FORWARD);
+            elevator.setPosition(0);
+        } else if(gamepad2.b) {
+            collector.setPower(-1);
+            elevator.setDirection(Servo.Direction.REVERSE);
+            elevator.setPosition(0);
         } else {
             collector.setPower(0);
-            elevator.setPosition(0);
+            elevator.setPosition(.5);
         }
 
         if(gamepad2.left_bumper){
@@ -152,11 +171,13 @@ public class TeleOp extends OpMode
         }
 
         if(gamepad2.start){
-            tail.setPosition(.5);
-        } else if(gamepad2.back){
-            tail.setPosition(1);
-        } else {
+            tail.setDirection(Servo.Direction.FORWARD);
             tail.setPosition(0);
+        } else if(gamepad2.back){
+            tail.setDirection(Servo.Direction.REVERSE);
+            tail.setPosition(0);
+        } else {
+            tail.setPosition(.5);
         }
 
 //        telemetry.addData("Clear", color.alpha());
