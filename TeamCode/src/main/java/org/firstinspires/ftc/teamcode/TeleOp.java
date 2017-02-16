@@ -132,8 +132,8 @@ public class TeleOp extends OpMode
         /*
             Literally just driving
          */
-        frontLeftMotor.setPower(-gamepad1.left_stick_y);
-        backLeftMotor.setPower(-gamepad1.left_stick_y);
+        frontLeftMotor.setPower(gamepad1.left_stick_y);
+        backLeftMotor.setPower(gamepad1.left_stick_y);
         frontRightMotor.setPower(-gamepad1.right_stick_y);
         backRightMotor.setPower(-gamepad1.right_stick_y);
 
@@ -141,8 +141,8 @@ public class TeleOp extends OpMode
         /*
             Right Bumper = Catapult
             Left Bumper = Scoopie
-            A = Collect
-            B = Eject
+            B = Collect
+            Y = Eject
             Start = Tail Down
             Back = Tail Up
            */
@@ -155,11 +155,11 @@ public class TeleOp extends OpMode
             catapult2.setPower(0);
         }
 
-        if(gamepad2.a){
+        if(gamepad2.b){
             collector.setPower(1);
             elevator.setDirection(Servo.Direction.FORWARD);
             elevator.setPosition(0);
-        } else if(gamepad2.b) {
+        } else if(gamepad2.y) {
             collector.setPower(-1);
             elevator.setDirection(Servo.Direction.REVERSE);
             elevator.setPosition(0);
@@ -169,9 +169,9 @@ public class TeleOp extends OpMode
         }
 
         if(gamepad2.left_bumper){
-            scoopie.setPosition(90);
-        } else {
             scoopie.setPosition(0);
+        } else {
+            scoopie.setPosition(90);
         }
 
         if(gamepad2.start){
