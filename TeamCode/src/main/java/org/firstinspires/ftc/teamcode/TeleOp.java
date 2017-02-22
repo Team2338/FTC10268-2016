@@ -95,7 +95,6 @@ public class TeleOp extends OpMode
         tail = hardwareMap.servo.get("tailMotor");
 
         catapult1.setDirection(DcMotorSimple.Direction.REVERSE);
-        catapult2.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        color = hardwareMap.colorSensor.get("Color");
 //        color.enableLed(true);
